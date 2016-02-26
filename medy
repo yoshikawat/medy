@@ -49,6 +49,7 @@ function get_fullpath {
 
 lab_dir=$(get_fullpath ${BASH_SOURCE:-$0})
 medy="$lab_dir"/$(basename $0)
+raw_url=https://raw.githubusercontent.com/yoshikawat/medy/master/medy
 
 function warn {
   # color:yellow
@@ -111,7 +112,7 @@ function get {
 function setlab {
   # get mirror and cache dir from local
   #default
-  mirror=ftp://ftp.iij.ad.jp/pub/cygwin/
+  mirror=ftp://ftp.iij.ad.jp/pub/cygwin
   cache=~/medycache
   arch="$(cygwin_arch)"
 
@@ -757,13 +758,15 @@ function medy-upgrade {
 
 function medy-upgrade-self {
   mv $medy $lab_dir/medy.orig
-  get -Oq "https://raw.githubusercontent.com/nobuyo/medy/master/medy" -P /lab_dir
+  #get -Oq "https://raw.githubusercontent.com/nobuyo/medy/master/medy" -P /lab_dir
+  wget -q -O $medy $raw_url
   if [ $? -ne 0 ]; then
     error "medy Could not found, reverting"
     mv $lab_dir/medy.orig $medy
   fi
 
-  chmod +x /bin/medy
+  #chmod +x /bin/medy
+  chmod +x $medy
   success "Updated medy"
 }
 
